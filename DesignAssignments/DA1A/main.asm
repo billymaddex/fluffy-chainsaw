@@ -39,5 +39,5 @@ ADD_LOOP:
 	BRNE	ADD_LOOP
 
 DONE:
-	;Wait here when done
+	;Wait here when done, or break when simulating
 	RJMP	DONE
