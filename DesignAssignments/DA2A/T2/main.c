@@ -20,7 +20,6 @@ int main(void)
     DDRB |= (1 << 3);
 	DDRB |= (1 << 2);
 	DDRC &= ~(1 << 3);
-	//PORTC &= ~(1 << 3);
 	
     while (1) 
     {
@@ -34,16 +33,6 @@ int main(void)
 			PORTB &= ~(1 << 2);
 			_delay_ms(13330);
 			PORTB |= (1 << 2);
-			//switch_event();
 		}
     }
-}
-
-int switch_event(void)
-{
-	PORTB &= ~(1 << 2);
-	_delay_ms(13330);
-	PORTB |= (1 << 2);
-	
-	return 0;
 }
