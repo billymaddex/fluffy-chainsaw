@@ -17,7 +17,7 @@ int main(void)
 	PORTB = 0xFF;
 	PORTC = 0xFF;
 	PORTD = 0xFF;
-    DDRB |= (1 << 3);
+	DDRB |= (1 << 3);
 	DDRB |= (1 << 2);
 	DDRC &= ~(1 << 3);
 	
