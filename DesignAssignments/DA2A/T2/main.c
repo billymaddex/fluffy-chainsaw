@@ -5,6 +5,8 @@
  * Author : Billy
  */ 
 
+#define F_CPU 1600000UL
+
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -37,15 +39,15 @@ int main(void)
       // call delay
       _delay_ms(3750);
 
-      // if swith is pressed, flash the other light
+      // if switch is pressed, flash the other light
       if (~PINC & (1 << 3))
-	{
-	  // turn the light on
-	  PORTB &= ~(1 << 2);
-	  // call delay
-	  _delay_ms(13330);
-	  // turn the light off
-	  PORTB |= (1 << 2);
-	}
+		{
+		  // turn the light on
+		  PORTB &= ~(1 << 2);
+		  // call delay
+		  _delay_ms(13330);
+		  // turn the light off
+		  PORTB |= (1 << 2);
+		}
     }
 }

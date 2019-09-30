@@ -30,17 +30,17 @@ MAIN_LOOP:
 	;; call delay at 250ms
 	LDI		R17, HIGH(250)
 	LDI		R16, LOW(250)
-	CALL		DELAY
+	CALL	DELAY
 	;; turn the light off
 	SBI		PORTB, 3
 	;; call delay at 375ms
 	LDI		R17, HIGH(375)
 	LDI		R16, LOW(375)
-	CALL		DELAY
+	CALL	DELAY
 
 	;; if switch is not pressed, repeat the loop
-	SBIC		PINC, 3
-	RJMP		MAIN_LOOP
+	SBIC	PINC, 3
+	RJMP	MAIN_LOOP
 
 	;; otherwise, flash the other light
 	;; turn the light on
@@ -48,12 +48,12 @@ MAIN_LOOP:
 	;; call delay at 1333ms
 	LDI		R17, HIGH(1333)
 	LDI		R16, LOW(1333)
-	CALL		DELAY
+	CALL	DELAY
 	;; turn the light off
 	SBI		PORTB, 2	
 
 	;; repeat the loop
-	RJMP		MAIN_LOOP
+	RJMP	MAIN_LOOP
 
 	;; simple delay function
 	;; takes input as 16-bit int in R17:R16
@@ -69,13 +69,13 @@ L2:
 	NOP
 L1:
 	DEC		R24
-	BRNE		L1
+	BRNE	L1
 	DEC		R23
-	BRNE		L2
-	SUBI		R21, 1
-	SBCI		R22, 0
-	BRNE		L3
+	BRNE	L2
+	SUBI	R21, 1
+	SBCI	R22, 0
+	BRNE	L3
 	CP		R21, R20
-	BRNE		L3
+	BRNE	L3
 
 	RET
