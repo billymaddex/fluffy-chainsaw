@@ -15,7 +15,7 @@ const int TICKS = 0x06;
 const int ON1 = 250;
 const int OFF1 = 375;
 const int ON2 = 1333;
-int clock1, clock2, led3;
+int clock1, clock2;
 
 // long flash on secondary LED
 int light2 (void)
@@ -23,10 +23,6 @@ int light2 (void)
 	// turn the light on
 	PORTB &= ~(1 << 2);
 	
-	// set clock 2 to normal operation
-	TCCR2A = 0x00;
-	// 250 ticks
-	TCNT2 = TICKS;
 	// set the clock value
 	clock2 = ON2;
 		
@@ -58,11 +54,10 @@ ISR (TIMER0_OVF_vect)
 	if (clock1 == 0)
 	{
 		// if LED3 is on
-		if (led3)
+		if ((~PORTB & 0x08) == 0x08)
 		{
 			// turn LED3 off
 			PORTB |= (1 << 3);
-			led3 = 0;
 			// set the off clock1 value
 			clock1 = OFF1;
 		}
@@ -71,7 +66,6 @@ ISR (TIMER0_OVF_vect)
 		{
 			// turn LED3 on
 			PORTB &= ~(1 << 3);
-			led3 = 1;
 			// set the on clock1 value
 			clock1 = ON1;
 		}
@@ -122,17 +116,21 @@ int main(void)
   // enable TIMER2 OVF interrupt
   TIMSK2 |= (1 << TOIE2);
 	
-  // LED pulse
+  
   // set clock 1 to normal operation
   TCCR0A = 0x00;
   // 250 ticks
   TCNT0 = TICKS;
+  // set clock 2 to normal operation
+  TCCR2A = 0x00;
+  // 250 ticks
+  TCNT2 = TICKS;
+	  
+  // LED pulse
   // turn the light on
   PORTB &= ~(1 << 3);
-  led3 = 1;
   // set the on clock1 value
   clock1 = ON1;
-  
   // start clock 1 with prescalar = 64
   TCCR0B |= (1 << CS01) | (1 << CS00);
 

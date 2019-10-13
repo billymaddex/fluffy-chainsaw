@@ -15,18 +15,13 @@ const int COMP = 249;
 const int ON1 = 250;
 const int OFF1 = 375;
 const int ON2 = 1333;
-int clock1, clock2, led3;
+int clock1, clock2;
 
 // long flash on secondary LED
 int light2 (void)
 {
 	// turn the light on
 	PORTB &= ~(1 << 2);
-	
-	// set clock 2 to CTC operation
-	TCCR2A = (1 << WGM21);
-	// COMPA = 249
-	OCR2A = COMP;
 	
 	// set the clock value
 	clock2 = ON2;
@@ -54,16 +49,14 @@ ISR (TIMER0_COMPA_vect)
 {
 	// decrement the clock counter and reset the timer
 	clock1--;
-	TIFR0 |= (1 << OCF0A);
 	
 	if (clock1 == 0)
 	{
 		// if LED3 is on
-		if (led3)
+		if ((~PORTB & 0x08) == 0X08)
 		{
 			// turn LED3 off
 			PORTB |= (1 << 3);
-			led3 = 0;
 			// set the off clock1 value
 			clock1 = OFF1;
 		}
@@ -72,7 +65,6 @@ ISR (TIMER0_COMPA_vect)
 		{
 			// turn LED3 on
 			PORTB &= ~(1 << 3);
-			led3 = 1;
 			// set the on clock1 value
 			clock1 = ON1;
 		}
@@ -84,7 +76,6 @@ ISR (TIMER2_COMPA_vect)
 {
 	// decrement the clock counter and reset the timer
 	clock2--;
-	TIFR2 |= (1 << OCF2A);
 	
 	if (clock2 == 0)
 	{
@@ -123,18 +114,21 @@ int main(void)
   // enable TIMER2 COMPA interrupt
   TIMSK2 |= (1 << OCIE2A);
 	
-  // LED pulse
   // set clock 1 to CTC operation
   TCCR0A |= (1 << WGM01);
   // COMPA = 249
   OCR0A = COMP;
   
+  // set clock 2 to CTC operation
+  TCCR2A = (1 << WGM21);
+  // COMPA = 249
+  OCR2A = COMP;
+  
+  // LED pulse
   // turn the light on
   PORTB &= ~(1 << 3);
-  led3 = 1;
   // set the on clock1 value
   clock1 = ON1;
-  
   // start clock 1 with prescalar = 64
   TCCR0B |= (1 << CS01) | (1 << CS00);
 
