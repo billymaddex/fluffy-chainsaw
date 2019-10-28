@@ -35,15 +35,14 @@ ISR(ADC_vect)
   // collect and compute ADC value
   // value stored in ADC
   //uint16_t voltage = ADC;
-  //float temp = (((5000 / 1024) * voltage) / 1000.0);
-  float cel = 5 * ADC / 1000.0;
+  float cel = (5 * ADC / 1000.0) + 4;
   float fahr = 1.8 * cel + 32;
   
   // output string
   char report[80];
   
   // generate output string
-  snprintf(report, sizeof(report), "Current temperature: %.1f° C\t%.1f° F\r\n\r\n", cel, fahr); 
+  snprintf(report, sizeof(report), "Current temperature:\t%.1f° C\t%.1f° F\r\n", cel, fahr); 
 
   // output to terminal
   ATOMIC_BLOCK(ATOMIC_FORCEON)
@@ -87,7 +86,7 @@ void uart_init(unsigned int ubrr)
   UBRR0L = (unsigned char)ubrr;
   // set terminal to output
   UCSR0B = (1 << TXEN0);
-  // set ouput mode
+  // set output mode
   UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
 }
 
@@ -116,9 +115,10 @@ void adc_init (void)
     (1 << ADLAR) |
     // Analog Channel Selection Bits
     // ADC4 (PC4 PIN27)
-    (1 << MUX2) |
+    (0 << MUX0) |
+	(1 << MUX2) |
     (0 << MUX1) |
-    (1 << MUX0);
+    (0 << MUX0);
   ADCSRA =
     // ADC ENable
     (1 << ADEN) |
