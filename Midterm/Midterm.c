@@ -32,7 +32,7 @@ void adc_init(void);
 void esp01_init(void);
 
 // function to transmit temperature value
-void xmit_temp(int temp);
+void xmit_temp(float temp);
 
 // TIMER1 CTC interrupt handler
 ISR(TIMER1_COMPA_vect)
@@ -52,8 +52,8 @@ ISR(ADC_vect)
 {
   // collect and compute ADC value
   // value stored in ADC
-  int cel = ((5 * ADC) / 1000) + 4;
-  int fahr = (1.8 * cel) + 32;
+  float cel = ((5.0 * ADC) / 1000.0) + 4;
+  float fahr = (1.8 * cel) + 32;
   
   // transmit the temp data
   xmit_temp(fahr);
@@ -170,7 +170,7 @@ void adc_init (void)
     (1 << ADPS0);
 }
 
-void xmit_temp(int temp)
+void xmit_temp(float temp)
 {
   // output strings
   char send[20];
@@ -178,7 +178,7 @@ void xmit_temp(int temp)
   int report_len = 0;
 	
   // generate output string
-  snprintf(report, sizeof(report), "GET /update?api_key=TNTAKRCSHOJW0ANL&field1=%d\r\n\r\n", temp);
+  snprintf(report, sizeof(report), "GET /update?api_key=TNTAKRCSHOJW0ANL&field1=%.2f\r\n\r\n", temp);
 	
   // get number of bytes to send
   while (report[report_len] != '\0')
@@ -195,7 +195,6 @@ void xmit_temp(int temp)
       uart_send_string("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80\r\n");
       uart_send_string(send);
       uart_send_string(report);
-      uart_send_string("AT+CIPCLOSE\r\n");
     }
 }
 
