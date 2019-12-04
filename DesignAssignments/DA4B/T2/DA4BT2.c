@@ -44,11 +44,11 @@ void ADC_init()
     // ADC Left Adjust Result
     (1 << ADLAR) |
     // Analog Channel Selection Bits
-    // ADC5 (PC5 PIN28)
+    // ADC0 (PC0)
     (0 << MUX3) |
-    (1 << MUX2) |
+    (0 << MUX2) |
     (0 << MUX1) |
-    (1 << MUX0);
+    (0 << MUX0);
 	
   ADCSRA =
     // ADC ENable
